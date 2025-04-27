@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Data Vault</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/smoothscroll-polyfill/dist/smoothscroll.min.js"></script>
+  <script>
+    smoothscroll.polyfill();
+  </script>
+  <style>
+     html {
+            scroll-behavior: smooth;
+        }
+
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: #0d1117;
+      color: #ffffff;
+      scroll-behavior: smooth;
+    }
+
+    .vanta-bg {
+      height: 100vh;
+      width: 100vw;
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+    }
+
+    nav {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 1rem;
+      border-radius: 1rem 0 0 1rem;
+    }
+
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #00ff99;
+    }
+
+    header {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    header p {
+      font-size: 1.25rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+
+    .cta {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .cta button,
+    .cta a {
+      padding: 0.75rem 1.5rem;
+      background: #00ff99;
+      color: #0d1117;
+      border: none;
+      border-radius: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .cta button:hover,
+    .cta a:hover {
+      background: #00cc7a;
+    }
+
+    section {
+      padding: 4rem 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .cards {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: #161b22;
+      padding: 2rem;
+      border-radius: 1rem;
+      flex: 1 1 200px;
+      text-align: center;
+    }
+
+    .card h3 {
+      margin-top: 1rem;
+      color: #00ff99;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .step {
+      flex: 1 1 200px;
+      text-align: center;
+      margin: 1rem;
+    }
+
+    .step img {
+      width: 50px;
+      margin-bottom: 1rem;
+    }
+
+    .impact {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .impact div {
+      text-align: center;
+    }
+
+    header,
+    section {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      max-width: 700px;
+    }
+
+    .hero p {
+      color: #ccc;
+      max-width: 600px;
+      margin-top: 1rem;
+    }
+
+    .cta-btn {
+      background-color: #16a34a;
+      color: white;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      margin-top: 2rem;
+      cursor: pointer;
+    }
+
+    .cta-btn:hover {
+      background-color: #15803d;
+    }
+
+    .how-it-works {
+      background-color: #0f0f0f;
+    }
+
+    .how-it-works {
+      background-color: #0f0f0f;
+    }
+
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .step {
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+    }
+
+    .step h3 {
+      color: #4ade80;
+    }
+
+    @media (min-width: 768px) {
+      .steps {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #111;
+      color: #fff;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      position: relative;
+      background-color: #333;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #222;
+      color: #fff;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #16a34a;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #15803d;
+    }
+
+    .toggle-link {
+      color: #4ade80;
+      text-align: center;
+      display: block;
+      margin-top: 1rem;
+      cursor: pointer;
+    }
+
+    #upload-and-scan {
+      padding: 4rem 2rem;
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+      background-color: #161b22;
+     
+      border-radius: 1rem;
+     
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+     
+    }
+
+    #upload-and-scan h2 {
+      color: #00ff99;
+      margin-bottom: 1rem;
+    }
+
+    #upload-and-scan p {
+      color: #ccc;
+      margin-bottom: 2rem;
+    }
+
+    .upload-and-scan-buttons {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .upload-and-scan-buttons button {
+      padding: 0.75rem 1.5rem;
+      background: #00ff99;
+      color: #0d1117;
+      border: none;
+      border-radius: 2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .upload-and-scan-buttons button:hover {
+      background: #00cc7a;
+      transform: scale(1.05);
+    }
+
+    #scan-progress {
+      width: 80%;
+      margin: 20px auto;
+      background-color: #222;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    #scan-progress-bar {
+      height: 20px;
+      background-color: #4ade80;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    #scan-results {
+      margin-top: 2rem;
+      text-align: left;
+    }
+
+    #scan-results h3 {
+      color: #00ff99;
+      margin-bottom: 1rem;
+    }
+
+    #scan-results ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    #scan-results li {
+      padding: 10px;
+      border-bottom: 1px solid #333;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+        border-radius: 0;
+      }
+    }
+
+    #loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background-color: #0d1117;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .loader {
+      border: 6px solid #00ff99;
+      border-top: 6px solid transparent;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    #results-page {
+      display: none;
+    }
+    .results-container {
+        padding: 4rem 2rem;
+        max-width: 1000px;
+        margin: auto;
+        text-align: center;
+    }
+    .impact-dashboard {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+    }
+
+    .stat-card {
+        background: #161b22;
+        padding: 2rem;
+        border-radius: 1rem;
+        text-align: center;
+        flex: 1 1 200px;
+        margin: 1rem;
+    }
+
+    .stat-card h3 {
+        color: #00ff99;
+        margin-bottom: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ffffff;
+    }
+
+    .stat-label {
+        color: #ccc;
+    }
+    .action-section {
+        margin-top: 3rem;
+    }
+
+    .action-section h3 {
+        color: #00ff99;
+        margin-bottom: 1rem;
+    }
+
+    .compression-cards {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+
+    .option-card {
+        background: #1a1a1a;
+        padding: 2rem;
+        border-radius: 1rem;
+        text-align: center;
+        flex: 1 1 200px;
+    }
+
+    .option-card h4 {
+        color: #4ade80;
+        margin-bottom: 1rem;
+    }
+
+    .recommendation-list {
+        margin-top: 2rem;
+    }
+
+    .recommendation {
+        background: #1a1a1a;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .recommendation span {
+        color: #ccc;
+    }
+    #welcome-box {
+      display: none;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 20px;
+      border-radius: 5px;
+      z-index: 1000;
+      font-size: 1.2em;
+    }
+
+
+    .recommendation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.recommendation-card {
+  background: #161b22;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  color: #d1d5db;
+  box-shadow: 0 0 5px rgba(0, 230, 118, 0.1);
+}
+
+
+    /* Leaf Styles */
+    .leaf {
+      position: fixed;
+      top: -1rem;
+      z-index: 1000;
+      pointer-events: none;
+      animation-name: fall;
+      animation-timing-function: linear;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(105vh);
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="loader-wrapper">
+    <div id="loader-text">
+      <strong>Green Data</strong> | Vault
+    </div>
+  </div>
+
+  <div id="vanta" class="vanta-bg"></div>
+
+  <nav>
+    <a href="#how">How It Works</a>
+    <a href="#upload-scan">Upload and Scan</a>
+    <a href="#" onclick="openModal('login')">Login</a>
+    <a href="#" onclick="openModal('signup')">Sign Up</a>
+  </nav>
+
+  <header>
+    <h1>Reduce Your Digital Carbon Footprint Effortlessly</h1>
+    <p>Automatically find and remove duplicate and unnecessary files to save storage, energy, and reduce CO₂ emissions.</p>
+    <div class="cta">
+      
+      <button onclick="openModal('login')">Get Started</button>
+      <a href="#how">How It Works</a>
+    </div>
+  </header>
+
+  <section id="how">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <h3>1. Connect or Upload</h3>
+        <p>Link cloud accounts or upload files.</p>
+
+      </div>
+      <div class="step">
+        <h3>2. Scan & Deduplicate</h3>
+        <p>We detect and clean duplicates and large files.</p>
+
+
+      </div>
+      <div class="step">
+        <h3>3. Track Your Impact</h3>
+        <p>See how much energy and space you saved.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="upload-scan">
+    <div id="upload-and-scan">
+      <h2>Ready to Make an Impact?</h2>
+      <p>Start your free analysis - no registration required</p>
+      <button class="upload-btn" onclick="document.getElementById('file-upload').click()">
+        Choose Files
+      </button>
+      <input type="file" id="file-upload" hidden multiple onchange="handleFileUpload(this.files)">
+      <div id="scan-progress">
+        <div id="scan-progress-bar"></div>
+      </div>
+      <div id="scan-results">
+        <h3>Potential Environmental Savings</h3>
+        <div id="results-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modals for Login and Signup -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('login')">&times;</span>
+      <h2>Login</h2>
+      <input type="text" placeholder="Username" id="loginUsername">
+      <input type="password" placeholder="Password" id="loginPassword">
+      <button onclick="login()">Login</button>
+      <a class="toggle-link" onclick="openModal('signup'); closeModal('login')">Don't have an account? Sign up</a>
+    </div>
+  </div>
+
+  <div id="signupModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('signup')">&times;</span>
+      <h2>Sign Up</h2>
+      <input type="text" placeholder="Username" id="signupUsername">
+      <input type="password" placeholder="Password" id="signupPassword">
+      <button onclick="signup()">Sign Up</button>
+      <a class="toggle-link" onclick="openModal('login'); closeModal('signup')">Already have an account? Login</a>
+    </div>
+  </div>
+
+
+  <section id="results-page" style="display: none;">
+    <div class="results-container">
+      <h2>Your Digital Cleanup Results</h2>
+
+      <!-- Impact Dashboard -->
+      <div class="impact-dashboard">
+        <div class="stat-card">
+          <h3>🌍 CO₂ Reduced</h3>
+          <p class="stat-number" id="co2-stat">0.25kg</p>
+          <p class="stat-label">Equivalent to planting 3 trees</p>
+        </div>
+        <div class="stat-card">
+          <h3>💾 Storage Freed</h3>
+          <p class="stat-number" id="storage-stat">4.7GB</p>
+          <p class="stat-label">Enough for 1,200 photos</p>
+        </div>
+        <div class="stat-card">
+          <h3>⚡ Energy Saved</h3>
+          <p class="stat-number" id="energy-stat">18kWh</p>
+          <p class="stat-label">Powering a laptop for 60 hours</p>
+        </div>
+      </div>
+
+
+      <h2 style="color: #00ff99; margin-bottom: 2rem;">Benefits</h2>
+
+      <div class="cards" style="margin-top: 3rem;">
+        <div class="card">
+          <h3>Automatic Duplicate Detection</h3>
+          <p>Identifies and removes redundant files to save space.</p>
+        </div>
+        <div class="card">
+          <h3>Lossless Compression</h3>
+          <p>Compresses large files without losing quality.</p>
+        </div>
+        <div class="card">
+          <h3>Impact Dashboard</h3>
+          <p>Real-time statistics on your eco-savings.</p>
+        </div>
+        <div class="card">
+          <h3>Sustainability Tips</h3>
+          <p>Actionable recommendations to stay green digitally.</p>
+        </div>
+      </div>
+
+       <!-- Compression Options -->
+       <div class="action-section">
+        <h2 style="color: #00ff99; margin-bottom: 2rem;">Compression Options</h2>
+        <div class="compression-cards">
+          <div class="option-card">
+            <h4>Lossless Compression</h4>
+            <p>Reduces file size without quality loss.</p>
+          </div>
+          <div class="option-card">
+            <h4>Intelligent Deduplication</h4>
+            <p>Automatically removes duplicate files.</p>
+          </div>
+        </div>
+      </div>
+     
+
+      <div class="action-section">
+        <h2 style="color: #00e676;">Further Recommendations</h2>
+        <div class="recommendation-list">
+          <div class="recommendation-card">
+            Empty your recycle bin regularly to free up space.
+          </div>
+          <div class="recommendation-card">
+            Archive old emails and documents to external storage.
+          </div>
+        </div>
+      </div>
+      
+     
+      
+
+
+ 
+  <script>
+    // bg
+    VANTA.GLOBE({
+      el: "#vanta",
+      mouseControls: true,
+      touchControls: true,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x00ff99,
+      backgroundColor: 0x0d1117
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+  setTimeout(function () {
+    const loader = document.getElementById('loader-wrapper');
+    loader.style.opacity = '0'; // Fade out
+    setTimeout(() => {
+      loader.style.display = 'none'; // Fully remove after fade
+    }, 500); // Match the CSS transition (0.5s)
+  }, 3000); // Keep it visible for 3 seconds
+});
+
+function openModal(modalId) {
+      document.getElementById(modalId + 'Modal').style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId + 'Modal').style.display = 'none';
+    }
+
+    function login() {
+      // Placeholder for login logic
+      alert('Login function called');
+      closeModal('login');
+    }
+
+    function signup() {
+      // Placeholder for signup logic
+      alert('Signup function called');
+      closeModal('signup');
+    }
+
+    function handleFileUpload(files) {
+      console.log('Files uploaded:', files);
+
+      // Reset progress bar
+      var progressBar = document.getElementById('scan-progress-bar');
+      progressBar.style.width = '0%';
+      var resultsList = document.getElementById('results-list');
+      resultsList.innerHTML = '';
+
+      // Simulate scanning process
+      simulateScan(files);
+    }
+
+    function simulateScan(files) {
+      var progressBar = document.getElementById('scan-progress-bar');
+      var resultsList = document.getElementById('results-list');
+      var progress = 0;
+      var interval = setInterval(function () {
+        progress += 1;
+        progressBar.style.width = progress + '%';
+        if (progress >= 100) {
+          clearInterval(interval);
+          // Simulate results
+          displayResults(files, resultsList);
+        }
+      }, 30);
+    }
+
+    function displayResults(files, resultsList) {
+  var totalSize = 0;
+  resultsList.innerHTML = ''; // Clear old results
+
+  // List all uploaded files
+  for (var i = 0; i < files.length; i++) {
+    var fileItem = document.createElement('li');
+    var fileSizeMB = (files[i].size / (1024 * 1024)).toFixed(2);
+    fileItem.textContent = `📄 ${files[i].name} - ${fileSizeMB} MB`;
+    resultsList.appendChild(fileItem);
+
+    totalSize += files[i].size;
+  }
+
+  // Add a line separator
+  var separator = document.createElement('hr');
+  resultsList.appendChild(separator);
+
+  // Total stats
+  var totalSizeMB = (totalSize / (1024 * 1024)).toFixed(2);
+
+  var totalFilesItem = document.createElement('li');
+  totalFilesItem.textContent = '🧮 Total Files Scanned: ' + files.length;
+  resultsList.appendChild(totalFilesItem);
+
+  var totalSizeItem = document.createElement('li');
+  totalSizeItem.textContent = '📦 Total Size Scanned: ' + totalSizeMB + ' MB';
+  resultsList.appendChild(totalSizeItem);
+
+  var savings = (totalSizeMB * 0.1).toFixed(2);
+  var savingsItem = document.createElement('li');
+  savingsItem.textContent = '🌿 Potential Savings: ' + savings + ' MB';
+  resultsList.appendChild(savingsItem);
+
+  // Scan completed success
+  var completed = document.createElement('li');
+  completed.innerHTML = '<span style="color:#00ff99;">✅ Scan Completed Successfully!</span>';
+  resultsList.appendChild(completed);
+
+  // Show the results-page after small delay
+  setTimeout(() => {
+    document.getElementById('results-page').style.display = 'block';
+  }, 500);
+}
+
+
+
+// Example: After your scan event or any trigger
+setTimeout(() => {
+  document.querySelector('.vanta-bg').style.animationPlayState = 'running';
+}, 3000); // Start the animation after 3 seconds (or on your desired event)
+
+  
+
+    /* Leaf Effect */
+    function createLeaf() {
+      const leaf = document.createElement('div');
+      leaf.textContent = '🍃';
+      leaf.classList.add('leaf');
+      leaf.style.left = `${Math.random() * 100}vw`;
+      leaf.style.animationDuration = `${Math.random() * 3 + 2}s`;
+      leaf.style.opacity = Math.random();
+      leaf.style.fontSize = `${Math.random() * 1.5 + 1}rem`;
+      document.body.appendChild(leaf);
+
+      leaf.addEventListener('animationend', () => {
+        leaf.remove();
+      });
+    }
+
+    // Run leaf effect only if *not* on the main page
+    if (window.location.pathname !== '/') {
+      setInterval(createLeaf, 200); // Adjust for more or fewer leaves
+    }
+
+
+// Trigger after your scan event or time delay
+setTimeout(() => {
+  document.querySelector('.vanta-bg').style.animationPlayState = 'running';
+}, 3000); // Start the animation after 3 seconds
+
+
+  </script>
+</body>
+
+</html>
